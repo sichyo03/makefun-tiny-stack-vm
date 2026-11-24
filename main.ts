@@ -90,6 +90,8 @@ function run(p: Uint8Array, inp: Uint8Array): { out: Uint8Array; code: number } 
           case 0x10: r = (a + b) | 0; break;
           case 0x11: r = (a - b) | 0; break;
           case 0x12: r = Math.imul(a, b); break;
+          // DIV/MOD edge: -2147483648 / -1 wraps to itself (the true
+          // quotient 2^31 has no int32) and x % -1 is 0 — see ISA.md.
           case 0x13:
             if (b === 0) return done(4);
             r = a === -2147483648 && b === -1 ? a : (a / b) | 0;
